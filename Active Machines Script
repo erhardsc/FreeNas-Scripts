@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+# Lists all active machines using ping
+# by Sumner Erhard
+# 15 Nov 2015
+
+if [ $# ­gt 3 ]
+
+then
+
+        echo "ERROR: Incorrect number of parameters"
+
+        exit 0
+
+fi
+
+echo
+IP=$1
+START=$2
+STOP=$3
+TOT_HOST=0
+falseSTART=$(( START + 1 ))
+echo ­n "Checking: $IP.$START"
+
+for ((i=$falseSTART; i<$STOP; i++)) # listing last octet of IP
+
+do
+
+        counter=$i
+
+        TOT_HOST=$(( $TOT_HOST + 1 ))
+
+        echo ­n " $counter"
+
+done
+
+echo
+echo
+echo "Live hosts:"
+counter=$START
+HOST_COUNT=0
+
+while [ $counter ­le $STOP ] #looping through all last octet IP given
+
+do
+
+        ip=$IP.$counter
+
+        if ping ­qc 2 $ip > /dev/null #sending output to null
+
+        then
+
+                echo "$ip" #will obtain just an IP address
+
+        HOST_COUNT=$(( $HOST_COUNT + 1 )) #count the number of lines
+
+        fi
+
+        counter=$(( $counter + 1 )) #incrementally goes through last octet of ip addresses
+
+done
+
+echo
+NOT_ALIVE=$(( TOT_HOST ­ HOST_COUNT + 1)) #count of all hosts
+echo "There were:"
+echo "$HOST_COUNT alive hosts"
+echo "$NOT_ALIVE not alive hosts"
+echo "found through use of '"ping"'."
+echo
+
+exit 0
