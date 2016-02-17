@@ -1,0 +1,13 @@
+!/bin/bash
+#
+# Lists my External IP address everytime it changes
+# by Sumner Erhard
+# 15 Feb 2016
+
+content=$(wget https://wtfismyip.com/text -q -O -)
+
+echo $content
+
+
+
+echo "{$content}" | mail -s "Shell output" serhard2556@gmail.com
